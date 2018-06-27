@@ -14,7 +14,7 @@
 # Usage:
 ```JAVA
 Interface rpc=(Interface) new RpcProxy().get("InterfaceImpl",Interface.class);  
-Object res=rpc.method(Object args...);
+Object res=rpc.method(Object... args);
 ```
 # Proto:
 ```
