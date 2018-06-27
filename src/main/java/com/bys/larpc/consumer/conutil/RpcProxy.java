@@ -46,8 +46,14 @@ public class RpcProxy implements InvocationHandler {
         }
         RpcProto.ResponseMessage responseMessage=RpcProto.ResponseMessage.parseFrom(responseArray);
         //System.out.println(responseMessage);
-        Helper result=ProtostuffUtil.deserialize(responseMessage.getResult().toByteArray(),Helper.class);
-        return result.getResult();
+        if(responseMessage.getStatus()){
+            Helper result=ProtostuffUtil.deserialize(responseMessage.getResult().toByteArray(),Helper.class);
+            return result.getResult();
+        }
+        else{
+            System.out.println("Rpc failed.");
+            return null;
+        }
     }
 }
 
