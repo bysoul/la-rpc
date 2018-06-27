@@ -1,6 +1,6 @@
 # Properties:  
 High Performance Networking Based on Netty  
-High Performance Serializing Based on Protobuf an Protostuff  
+High Performance Serializing Based on Protobuf and Protostuff  
 Multiplexing of Client Channel   
 Call Methods in Server ThreadPool  
 Solve Packet Fragmentation and Assembly  
