@@ -1,4 +1,4 @@
-![](https://github.com/bysoul/la-rpc/blob/master/display/rpclogo.jpg）
+![](https://github.com/bysoul/la-rpc/blob/master/display/rpclogo.jpg)
 # Properties:  
 * High Performance Networking Based on Netty  
 * High Performance Serializing Based on Protobuf and Protostuff  
