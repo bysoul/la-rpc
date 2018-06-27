@@ -80,7 +80,9 @@ public class RpcClient {
         channel.writeAndFlush(firstMessage);
     }
     public byte[] get(int reqId){
-        return hs.get(reqId);
+        byte[] response=hs.get(reqId);
+        hs.remove(reqId);
+        return response;
     }
 
     public void setResult(int reqId,byte[] result) {
