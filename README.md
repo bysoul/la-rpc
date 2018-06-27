@@ -1,4 +1,3 @@
-# la-rpc
 # Properties:  
 High Performance Networking Based on Netty  
 High Performance Serializing Based on Protobuf an Protostuff  
