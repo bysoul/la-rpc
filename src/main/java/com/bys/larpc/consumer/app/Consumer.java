@@ -3,25 +3,35 @@ package com.bys.larpc.consumer.app;
 import com.bys.larpc.consumer.conutil.RpcProxy;
 import com.bys.larpc.service.Calculator;
 
+import java.util.ArrayList;
+
 import static java.lang.System.exit;
+import static java.lang.Thread.sleep;
 
 public class Consumer {
     public static void main(String[] args) {
+        System.out.println(Thread.currentThread());
 
         Calculator c=(Calculator) new RpcProxy().get("CalculatorImpl",Calculator.class);
         Thread t=null;
-        for(int i=0;i<10;i++){
+        /*for(int i=0;i<10;i++){
             (t=new Thread(new Run(i))).start();
-        }
+        }*/
         try {
-            Thread.sleep(1000);
+            sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(c.add(1,2));
+        System.out.println(c.add(1,10));
+        System.out.println("??");
         System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles","true");
+        /*try {
+            //t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         try {
-            t.join();
+            sleep(100000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RpcServer {
-    public static RpcServer server;
+    public static volatile RpcServer server;
     private ExecutorService executor;
     private AtomicInteger i;
     public RpcServer() {
