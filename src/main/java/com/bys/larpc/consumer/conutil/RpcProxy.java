@@ -38,7 +38,7 @@ public class RpcProxy implements InvocationHandler {
                     RpcClient.client=new RpcClient();
             }
         }
-        RpcClient.client.send(requestArray);
+        RpcClient.client.send(requestId,requestArray);
         //轮询result
         byte[] responseArray=null;
         while((responseArray=RpcClient.client.get(requestId))==null){

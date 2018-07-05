@@ -1,7 +1,10 @@
 package com.bys.larpc.consumer.app;
 
+import com.bys.larpc.consumer.conutil.RpcClient;
 import com.bys.larpc.consumer.conutil.RpcProxy;
 import com.bys.larpc.service.Calculator;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.nio.NioEventLoop;
 
 import java.util.ArrayList;
 
@@ -17,19 +20,15 @@ public class Consumer {
         /*for(int i=0;i<10;i++){
             (t=new Thread(new Run(i))).start();
         }*/
+        System.out.println(c.add(1,10));
         try {
-            sleep(1000);
+            sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(c.add(1,10));
+        System.out.println(c.add(31,10));
         System.out.println("??");
         System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles","true");
-        /*try {
-            //t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
         try {
             sleep(100000);
         } catch (InterruptedException e) {

@@ -3,6 +3,7 @@ package com.bys.larpc.provider.app;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 import com.bys.larpc.provider.proutil.MessageHandler;
 import com.bys.larpc.service.*;
@@ -14,6 +15,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.timeout.IdleStateHandler;
 
 
 public class Provider {
@@ -32,6 +34,7 @@ public class Provider {
                         @Override
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
+                            ch.pipeline().addLast(new IdleStateHandler(240, 1000, 1000, TimeUnit.SECONDS));
                             ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,4,0,4));
                             ch.pipeline().addLast(new MessageHandler());
 

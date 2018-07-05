@@ -1,8 +1,11 @@
 package com.bys.larpc.provider.proutil;
+import com.bys.larpc.consumer.conutil.RpcClient;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 
 public class MessageHandler extends ChannelInboundHandlerAdapter {
     private byte[] heartbeat;
@@ -43,6 +46,19 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
 
     public void channelReadComplete(ChannelHandlerContext ctx)throws Exception{
         ctx.flush();
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        super.userEventTriggered(ctx, evt);
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent event = (IdleStateEvent) evt;
+            if (event.state().equals(IdleState.READER_IDLE)) {
+                ctx.channel().close();
+            } else if (event.state().equals(IdleState.WRITER_IDLE)) {
+            } else if (event.state().equals(IdleState.ALL_IDLE)) {
+            }
+        }
     }
 
     @Override

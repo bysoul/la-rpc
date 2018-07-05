@@ -8,6 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ProxyHandler extends
@@ -32,6 +33,28 @@ public class ProxyHandler extends
         rpcClient.times=0;
         System.out.println("ProxyHandler:new channel");
         rpcClient.setChannel(ctx.channel());
+        //if reconnection is successful, resend requests.
+        int cacheSize;
+        if((cacheSize=rpcClient.requestCache.size())>0){
+            for(Map.Entry<Integer,byte[]> entry:rpcClient.requestCache.entrySet()){
+                try {
+                    rpcClient.send(entry.getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("qwer");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         /*ByteBuf firstMessage=Unpooled.directBuffer();
         firstMessage.writeInt(req.length);
         firstMessage.writeBytes(req);
@@ -44,12 +67,15 @@ public class ProxyHandler extends
         //reset heartbeat
         //rpcClient.timeout.set(0);
         rpcClient.times=0;
+
         ByteBuf buf=(ByteBuf) msg;
         if(buf.readableBytes()==1){
             System.out.println("get Pong");
         }
         else{
             int requestId=buf.readInt();
+            //remove request bytes from requestCache
+            rpcClient.removeRequest(requestId);
             byte[] resp=new byte[buf.readableBytes()];
             buf.readBytes(resp);
             rpcClient.setResult(requestId,resp);
@@ -66,6 +92,8 @@ public class ProxyHandler extends
                 RpcClient.client.times++;
                 if(RpcClient.client.times==3){
                     RpcClient.client.times=0;
+                    //关闭channel
+                    ctx.channel().close();
                     channelInactive(ctx);
                 }
                 ByteBuf heartbeat=Unpooled.directBuffer();
