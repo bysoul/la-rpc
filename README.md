@@ -2,10 +2,10 @@
 # Properties:  
 * High Performance Networking Based on Netty  
 * High Performance Serializing Based on Protobuf and Protostuff  
-* Multiplexing of Client Channel   
-* Call Methods in Server ThreadPool  
 * HeartBeat and Reconnection 
 * Solve Packet Fragmentation and Assembly  
+* Multiplexing of Client Channel   
+* Call Methods in Server ThreadPool  
 
 # Properties Coming Soon:  
 * Integrate Spring  
