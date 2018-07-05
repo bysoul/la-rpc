@@ -4,12 +4,12 @@
 * High Performance Serializing Based on Protobuf and Protostuff  
 * Multiplexing of Client Channel   
 * Call Methods in Server ThreadPool  
+* HeartBeat and Reconnection 
 * Solve Packet Fragmentation and Assembly  
 
 # Properties Coming Soon:  
 * Integrate Spring  
-* Integrate ZooKeeper  
-* Recover from Disconnection  
+* Integrate ZooKeeper   
 
 # Usage:
 ```JAVA
