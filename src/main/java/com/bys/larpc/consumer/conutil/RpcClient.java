@@ -9,9 +9,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.net.InetSocketAddress;
 import java.util.HashMap;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,8 +24,8 @@ public class RpcClient {
     //check connection
     public static volatile boolean flag=true;
     public AtomicInteger timeout;
-    private String hostName="localhost";
-    private int port=8080;
+    private String hostName;
+    private int port;
     private  volatile Channel channel;
     private HashMap<Integer,byte[]> responseCache;
     public ConcurrentHashMap<Integer,byte[]> requestCache;
@@ -33,19 +34,26 @@ public class RpcClient {
 
 
     public RpcClient() throws Exception {
+        ClassPathXmlApplicationContext context=
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+        RemoteAddress remoteAddress=context.getBean("remoteAddress",RemoteAddress.class);
+        hostName=remoteAddress.getHostName();
+        port=remoteAddress.getPort();
+        context.close();
+
         responseCache =new HashMap<>();
         requestCache=new ConcurrentHashMap<>();
         times=0;
         group = new NioEventLoopGroup();
         connect(group);
         //timeout=new AtomicInteger(0);
+
     }
     public void connect(EventLoopGroup eventLoopGroup) {
         Bootstrap b = new Bootstrap();
         b.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .remoteAddress(new InetSocketAddress(hostName,port))
-                .option(ChannelOption.SO_KEEPALIVE,true)
                 .option(ChannelOption.TCP_NODELAY,true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
@@ -57,13 +65,7 @@ public class RpcClient {
 
                         }
                 });
-        System.out.println("aaaa");
         ChannelFuture cf= null;
-        try {
-            b.connect().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         b.connect().addListener(new ConnectionListener());
     }
 
@@ -112,5 +114,9 @@ public class RpcClient {
 
     public void removeRequest(int requestId) {
         requestCache.remove(requestId);
+    }
+
+    public void close(){
+        group.shutdownGracefully();
     }
 }

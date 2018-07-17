@@ -22,7 +22,7 @@ public class Provider {
     private Calculator calculator = new CalculatorImpl();
 
     public static void main(String[] args) throws IOException {
-        int port=8080;
+        int port=5687;
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

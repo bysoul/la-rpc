@@ -7,6 +7,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoop;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import static java.lang.System.exit;
 import static java.lang.Thread.sleep;
@@ -14,7 +15,6 @@ import static java.lang.Thread.sleep;
 public class Consumer {
     public static void main(String[] args) {
         System.out.println(Thread.currentThread());
-
         Calculator c=(Calculator) new RpcProxy().get("CalculatorImpl",Calculator.class);
         Thread t=null;
         /*for(int i=0;i<10;i++){
@@ -22,19 +22,12 @@ public class Consumer {
         }*/
         System.out.println(c.add(1,10));
         try {
-            sleep(10000);
+            sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(c.add(31,10));
-        System.out.println("??");
         System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles","true");
-        try {
-            sleep(100000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        exit(1);
+        RpcClient.client.close();
     }
 
 }

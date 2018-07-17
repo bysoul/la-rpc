@@ -14,7 +14,9 @@ public class ConnectionListener implements ChannelFutureListener {
 
     @Override
     public void operationComplete(ChannelFuture channelFuture) throws Exception {
+        System.out.println("ConnectionListener:operationComplete");
         if (!channelFuture.isSuccess()) {
+            if(!channelFuture.channel().isRegistered()) System.out.println("!!!!!!!!!!!!");
             System.out.println(Thread.currentThread());
             System.out.println("Reconnect");
             RpcClient.client.times++;

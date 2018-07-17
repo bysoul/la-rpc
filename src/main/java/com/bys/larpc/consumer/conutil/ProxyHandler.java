@@ -44,17 +44,6 @@ public class ProxyHandler extends
                 }
             }
         }
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("qwer");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         /*ByteBuf firstMessage=Unpooled.directBuffer();
         firstMessage.writeInt(req.length);
         firstMessage.writeBytes(req);
@@ -63,7 +52,7 @@ public class ProxyHandler extends
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception{
-        System.out.println("reading");
+        System.out.println("reading...");
         //reset heartbeat
         //rpcClient.timeout.set(0);
         rpcClient.times=0;
