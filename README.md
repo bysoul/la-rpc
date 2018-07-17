@@ -5,10 +5,10 @@
 * HeartBeat and Reconnection 
 * Solve Packet Fragmentation and Assembly  
 * Multiplexing of Client Channel   
+* Integrate Spring  
 * Call Methods in Server ThreadPool  
 
 # Properties Coming Soon:  
-* Integrate Spring  
 * Integrate ZooKeeper   
 
 # Usage:
