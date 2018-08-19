@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RpcServer {
-    public static volatile RpcServer server;
+public class Provider {
+    public static volatile Provider provider;
     private ExecutorService executor;
     private AtomicInteger i;
-    public RpcServer() {
+    public Provider() {
         executor = Executors.newCachedThreadPool();
         i=new AtomicInteger(0);
     }
@@ -44,7 +44,7 @@ public class RpcServer {
             //stuff反序列化args
             Helper dehelper = ProtostuffUtil.deserialize(actual, Helper.class);
             //反射
-            System.out.println("RpcServer: "+i.getAndIncrement()+" "+new Date(System.currentTimeMillis()) + ": " + className);
+            System.out.println("Provider: "+i.getAndIncrement()+" "+new Date(System.currentTimeMillis()) + ": " + className);
 
             Class clazz = null;
             try {

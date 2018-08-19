@@ -77,7 +77,7 @@ public class ProxyHandler extends
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state().equals(IdleState.READER_IDLE)) {
-                System.out.println("No message from server for 5s");
+                System.out.println("No message from provider for 120s");
                 RpcClient.client.times++;
                 if(RpcClient.client.times==3){
                     RpcClient.client.times=0;

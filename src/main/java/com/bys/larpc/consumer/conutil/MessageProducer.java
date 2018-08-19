@@ -8,7 +8,7 @@ import com.google.protobuf.ByteString;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class ProduceMessage {
+public class MessageProducer {
     public static byte[] encode(String requestMessage, int reqId , String className, Method method, Object[] args) {
         if (requestMessage.equals("RequestMessage")) {
             RpcProto.RequestMessage.Builder rBuilder = RpcProto.RequestMessage.newBuilder()

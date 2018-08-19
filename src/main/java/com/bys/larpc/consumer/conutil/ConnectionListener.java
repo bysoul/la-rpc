@@ -1,12 +1,8 @@
 package com.bys.larpc.consumer.conutil;
 
-import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoop;
-import io.netty.channel.nio.NioEventLoop;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,12 +12,11 @@ public class ConnectionListener implements ChannelFutureListener {
     public void operationComplete(ChannelFuture channelFuture) throws Exception {
         System.out.println("ConnectionListener:operationComplete");
         if (!channelFuture.isSuccess()) {
-            if(!channelFuture.channel().isRegistered()) System.out.println("!!!!!!!!!!!!");
             System.out.println(Thread.currentThread());
             System.out.println("Reconnect");
             RpcClient.client.times++;
             if(RpcClient.client.times==5) {
-                RpcClient.client.flag=false;
+                RpcClient.client.connected =false;
                 return;
             }
             final EventLoop loop = channelFuture.channel().eventLoop();

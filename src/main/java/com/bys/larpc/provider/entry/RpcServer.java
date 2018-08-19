@@ -1,4 +1,4 @@
-package com.bys.larpc.provider.app;
+package com.bys.larpc.provider.entry;
 
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
 
 
-public class Provider {
+public class RpcServer {
     private Calculator calculator = new CalculatorImpl();
 
     public static void main(String[] args) throws IOException {

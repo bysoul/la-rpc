@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,12 +23,12 @@ import static java.lang.Thread.sleep;
 public class RpcClient {
     public static volatile RpcClient client;
     //check connection
-    public static volatile boolean flag=true;
+    public static volatile boolean connected =true;
     public AtomicInteger timeout;
     private String hostName;
     private int port;
     private  volatile Channel channel;
-    private HashMap<Integer,byte[]> responseCache;
+    private ConcurrentHashMap<Integer,LinkedBlockingQueue<byte[]>> responseCache;
     public ConcurrentHashMap<Integer,byte[]> requestCache;
     public Integer times;
     private EventLoopGroup group ;
@@ -41,7 +42,7 @@ public class RpcClient {
         port=remoteAddress.getPort();
         context.close();
 
-        responseCache =new HashMap<>();
+        responseCache =new ConcurrentHashMap<>();
         requestCache=new ConcurrentHashMap<>();
         times=0;
         group = new NioEventLoopGroup();
@@ -78,20 +79,23 @@ public class RpcClient {
     }
     public void send(int requestId,byte[] bytes) throws Exception {
         while(channel==null){
-            if(!flag){
-                throw new Exception("Can't connect to server");
+            if(!connected){
+                throw new Exception("Can't connect to provider");
             }
         }
         requestCache.put(requestId,bytes);
+        if(!responseCache.containsKey(requestId))
+            responseCache.put(requestId,new LinkedBlockingQueue<>());
         ByteBuf firstMessage=Unpooled.directBuffer();
         firstMessage.writeInt(bytes.length);
         firstMessage.writeBytes(bytes);
         channel.writeAndFlush(firstMessage);
     }
+    //Used for resending after reconnection
     public void send(byte[] bytes) throws Exception {
         while(channel==null){
-            if(!flag){
-                throw new Exception("Can't connect to server");
+            if(!connected){
+                throw new Exception("Can't connect to provider");
             }
         }
         ByteBuf firstMessage=Unpooled.directBuffer();
@@ -100,22 +104,31 @@ public class RpcClient {
         channel.writeAndFlush(firstMessage);
     }
     public byte[] get(int reqId) throws Exception{
-        if(!flag){
-            throw new Exception("Can't connect to server");
+        if(!connected){
+            throw new Exception("Can't connect to provider");
         }
-        byte[] response= responseCache.get(reqId);
-        responseCache.remove(reqId);
+        byte[] response= responseCache.get(reqId).take();
         return response;
     }
 
     public void setResult(int reqId,byte[] result) {
-        responseCache.put(reqId,result);
+        try {
+            responseCache.get(reqId).put(result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeRequest(int requestId) {
         requestCache.remove(requestId);
     }
 
+    //clean responseCache for consumer thread
+    public void clean(){
+        responseCache.remove((int)Thread.currentThread().getId());
+    }
+
+    //close the whole client
     public void close(){
         group.shutdownGracefully();
     }

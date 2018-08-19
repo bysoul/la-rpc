@@ -1,5 +1,4 @@
 package com.bys.larpc.provider.proutil;
-import com.bys.larpc.consumer.conutil.RpcClient;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,10 +24,10 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
         byte[] request=new byte[in.readableBytes()];
         in.readBytes(request);
         //singleton
-        if(RpcServer.server==null){
-            synchronized (RpcServer.class){
-                if(RpcServer.server==null){
-                    RpcServer.server=new RpcServer();
+        if(Provider.provider ==null){
+            synchronized (Provider.class){
+                if(Provider.provider ==null){
+                    Provider.provider =new Provider();
                 }
             }
         }
@@ -39,8 +38,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
             System.out.println("ping");
         }
         else {
-            System.out.println(request.toString());
-            RpcServer.server.callMethod(ctx.channel(), request);
+            Provider.provider.callMethod(ctx.channel(), request);
         }
     }
 

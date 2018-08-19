@@ -30,7 +30,7 @@ public class RpcProxy implements InvocationHandler {
         //生成请求ID
         int requestId=(int)Thread.currentThread().getId();
         //生成请求byte[]
-        byte[] requestArray = ProduceMessage.encode("RequestMessage",requestId,name,method,args);
+        byte[] requestArray = MessageProducer.encode("RequestMessage",requestId,name,method,args);
         //singleton
         if(RpcClient.client==null){
             synchronized (RpcClient.class){

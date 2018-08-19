@@ -1,33 +1,27 @@
-package com.bys.larpc.consumer.app;
+package com.bys.larpc.consumer.entry;
 
 import com.bys.larpc.consumer.conutil.RpcClient;
 import com.bys.larpc.consumer.conutil.RpcProxy;
 import com.bys.larpc.service.Calculator;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.nio.NioEventLoop;
 
-import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
-
-import static java.lang.System.exit;
 import static java.lang.Thread.sleep;
 
 public class Consumer {
     public static void main(String[] args) {
         System.out.println(Thread.currentThread());
-        Calculator c=(Calculator) new RpcProxy().get("CalculatorImpl",Calculator.class);
-        Thread t=null;
-        /*for(int i=0;i<10;i++){
-            (t=new Thread(new Run(i))).start();
-        }*/
-        System.out.println(c.add(1,10));
+        Calculator a=(Calculator) new RpcProxy().get("CalculatorImpl",Calculator.class);
+        System.out.println(a.add(1,10));
+        Calculator b=(Calculator) new RpcProxy().get("CalculatorImpl",Calculator.class);
+        System.out.println(b.add(1,10));
+        RpcClient.client.clean();
+        RpcClient.client.close();
         try {
             sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles","true");
-        RpcClient.client.close();
+
     }
 
 }
