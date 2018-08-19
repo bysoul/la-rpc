@@ -11,6 +11,9 @@
 # Properties Coming Soon:  
 * Integrate ZooKeeper   
 
+# Frame:
+![](https://github.com/bysoul/la-rpc/blob/master/display/frame.jpg)
+
 # Usage:
 ```JAVA
 Interface rpc=(Interface) new RpcProxy().get("InterfaceImpl",Interface.class);  
