@@ -4,11 +4,9 @@ package com.bys.larpc.consumer.conutil;
 import com.bys.larpc.rpcutil.Helper;
 import com.bys.larpc.rpcutil.RpcProto;
 import com.bys.larpc.rpcutil.ProtostuffUtil;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-
 import static java.lang.Thread.sleep;
 import static org.apache.logging.log4j.core.util.Loader.getClassLoader;
 
