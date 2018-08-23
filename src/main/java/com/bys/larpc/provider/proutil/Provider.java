@@ -55,7 +55,11 @@ public class Provider {
             int n = argTypes.size();
             Class[] types = new Class[n];
             for (int i = 0; i < n; i++) {
-                if (argTypes.get(i).equals("int"))
+                if (argTypes.get(i).equals("byte"))
+                    types[i] = byte.class;
+                else if (argTypes.get(i).equals("short"))
+                    types[i] = short.class;
+                else if (argTypes.get(i).equals("int"))
                     types[i] = int.class;
                 else if (argTypes.get(i).equals("long"))
                     types[i] = long.class;
@@ -63,6 +67,10 @@ public class Provider {
                     types[i] = float.class;
                 else if (argTypes.get(i).equals("double"))
                     types[i] = double.class;
+                else if (argTypes.get(i).equals("boolean"))
+                    types[i] = boolean.class;
+                else if (argTypes.get(i).equals("char"))
+                    types[i] = char.class;
                 else
                     types[i] = Class.forName(argTypes.get(i));
             }
