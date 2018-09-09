@@ -25,6 +25,7 @@ public class RpcClient {
     //check connection
     public static volatile boolean connected =true;
     public AtomicInteger timeout;
+    private ServiceDiscovery sd;
     private String host;
     private int port;
     private  volatile Channel channel;
@@ -41,10 +42,7 @@ public class RpcClient {
         String zkHost=remoteAddress.getHostName();
         int zkPort=remoteAddress.getPort();
         context.close();
-        ServiceDiscovery sd=new ServiceDiscovery(zkHost+":"+zkPort);
-        String serverAddress[]=sd.discover().split(":");
-        host=serverAddress[0];
-        port=Integer.valueOf(serverAddress[1]);
+        sd=new ServiceDiscovery(zkHost+":"+zkPort);
         responseCache =new ConcurrentHashMap<>();
         requestCache=new ConcurrentHashMap<>();
         times=0;
@@ -53,7 +51,13 @@ public class RpcClient {
         //timeout=new AtomicInteger(0);
 
     }
+    private void getServerAddress(){
+        String serverAddress[]=sd.discover().split(":");
+        host=serverAddress[0];
+        port=Integer.valueOf(serverAddress[1]);
+    }
     public void connect(EventLoopGroup eventLoopGroup) {
+        getServerAddress();
         Bootstrap b = new Bootstrap();
         b.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
