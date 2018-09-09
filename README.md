@@ -1,14 +1,12 @@
 # Properties:  
 * High Performance Networking Based on Netty  
 * High Performance Serializing Based on Protobuf and Protostuff  
+* Register and Discover Services Using ZooKeeper
 * HeartBeat and Reconnection 
 * Solve Packet Fragmentation and Assembly  
 * Multiplexing of Client Channel   
 * Integrate Spring  
-* Call Methods in Server ThreadPool  
-
-# Properties Coming Soon:  
-* Integrate ZooKeeper   
+* Methods Called in Server ThreadPool  
 
 # Frame:
 ![](https://github.com/bysoul/la-rpc/blob/master/display/frame.jpg)
