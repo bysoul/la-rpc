@@ -8,7 +8,7 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <cotext:component-scan base-package="com.bys.larpc.consumer.conutil"/>
+    <cotext:component-scan base-package="com.bys.larpc.rpcutil"/>
     <context:property-placeholder location="classpath:address.properties"/>
 
 </beans>

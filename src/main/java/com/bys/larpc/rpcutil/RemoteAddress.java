@@ -1,4 +1,4 @@
-package com.bys.larpc.consumer.conutil;
+package com.bys.larpc.rpcutil;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

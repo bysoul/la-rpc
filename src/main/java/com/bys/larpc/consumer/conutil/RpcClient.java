@@ -1,5 +1,6 @@
 package com.bys.larpc.consumer.conutil;
 
+import com.bys.larpc.rpcutil.RemoteAddress;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -12,7 +13,6 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.net.InetSocketAddress;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +25,7 @@ public class RpcClient {
     //check connection
     public static volatile boolean connected =true;
     public AtomicInteger timeout;
-    private String hostName;
+    private String host;
     private int port;
     private  volatile Channel channel;
     private ConcurrentHashMap<Integer,LinkedBlockingQueue<byte[]>> responseCache;
@@ -38,10 +38,13 @@ public class RpcClient {
         ClassPathXmlApplicationContext context=
                 new ClassPathXmlApplicationContext("applicationContext.xml");
         RemoteAddress remoteAddress=context.getBean("remoteAddress",RemoteAddress.class);
-        hostName=remoteAddress.getHostName();
-        port=remoteAddress.getPort();
+        String zkHost=remoteAddress.getHostName();
+        int zkPort=remoteAddress.getPort();
         context.close();
-
+        ServiceDiscovery sd=new ServiceDiscovery(zkHost+":"+zkPort);
+        String serverAddress[]=sd.discover().split(":");
+        host=serverAddress[0];
+        port=Integer.valueOf(serverAddress[1]);
         responseCache =new ConcurrentHashMap<>();
         requestCache=new ConcurrentHashMap<>();
         times=0;
@@ -54,7 +57,7 @@ public class RpcClient {
         Bootstrap b = new Bootstrap();
         b.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
-                .remoteAddress(new InetSocketAddress(hostName,port))
+                .remoteAddress(new InetSocketAddress(host,port))
                 .option(ChannelOption.TCP_NODELAY,true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                         @Override

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+import com.bys.larpc.rpcutil.RemoteAddress;
 import com.bys.larpc.provider.proutil.MessageHandler;
+import com.bys.larpc.provider.proutil.ServiceRegistry;
 import com.bys.larpc.service.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -16,6 +18,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 public class RpcServer {
@@ -41,6 +44,15 @@ public class RpcServer {
                         }
                     });
             ChannelFuture f = b.bind().sync();
+            ClassPathXmlApplicationContext context=
+                    new ClassPathXmlApplicationContext("applicationContext.xml");
+            RemoteAddress remoteAddress=context.getBean("remoteAddress",RemoteAddress.class);
+            String zkHost=remoteAddress.getHostName();
+            int zkPort=remoteAddress.getPort();
+            context.close();
+            ServiceRegistry sr=new ServiceRegistry(zkHost+":"+zkPort);
+            sr.register("127.0.0.1:"+port);
+            System.out.println("Server Running");
             f.channel().closeFuture().sync();
         }
         catch (Exception e){
