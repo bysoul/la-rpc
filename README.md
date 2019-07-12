@@ -1,4 +1,4 @@
-# Properties:  
+# Features:  
 * High Performance Networking Based on Netty  
 * High Performance Serializing Based on Protobuf and Protostuff  
 * Register and Discover Services Using ZooKeeper
