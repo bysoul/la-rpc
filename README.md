@@ -8,9 +8,6 @@
 * Integrate Spring  
 * Methods Called in Server ThreadPool  
 
-# Frame:
-![](https://github.com/bysoul/la-rpc/blob/master/display/frame.jpg)
-
 # Usage:
 ```JAVA
 Interface rpc=(Interface) new RpcProxy().get("InterfaceImpl",Interface.class);  
